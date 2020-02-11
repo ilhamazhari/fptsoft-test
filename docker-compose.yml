@@ -1,0 +1,29 @@
+version: '2'
+
+services:
+  web:
+    image: nginx:latest
+    ports:
+      - "80:80"
+    volumes:
+      - ./:/app
+      - ./fpt-test.conf:/etc/nginx/conf.d/default.conf
+    links:
+      - php
+    depends_on:
+      - php
+  php:
+    build: .
+    volumes:
+      - ./:/app
+    links:
+      - db
+  db:
+    image: mysql:latest
+    ports:
+      - "3306:3306"
+    environment:
+      - MYSQL_ROOT_PASSWORD=FPTSoft@2020
+      - MYSQL_USER=fptmysql
+      - MYSQL_PASSWORD=FPTSoft@2020
+      - MYSQL_DATABASE=dbmusic
