@@ -234,7 +234,7 @@
     });
 
     $('#ArtistTable tbody').on('click', '.edit-button', function(){
-      $('.modal-title').html('Edit Artists');
+      $('#artistsModal .modal-title').html('Edit Artists');
       id =$(this).data('artistid');
       dataArtist = $.ajax({
         url: '{{url("/api/artists/get")}}',
