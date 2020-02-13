@@ -13,5 +13,9 @@ use Illuminate\Http\Request;
 |
 */
 
-Route::post('/artists', 'APIController@showArtist');
+Route::post('/artists', 'APIController@showArtists');
+Route::post('/artists/get', 'APIController@getArtists');
+Route::post('/artists/add', 'APIController@addArtists');
+Route::post('/artists/update', 'APIController@updateArtists');
+Route::post('/artists/delete', 'APIController@deleteArtists');
 

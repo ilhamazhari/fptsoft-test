@@ -17,7 +17,7 @@ class APIController extends Controller
       }
     }
 
-    public function showArtist(Request $request)
+    public function showArtists(Request $request)
     {
       if($this->checkAPIToken($request->api_token) == true){
         $totalData = Artists::count();
@@ -55,9 +55,77 @@ class APIController extends Controller
           'data' => $artists
         );
 
-        return response()->json($data);
+        return response()->json($data,200);
       }else{
-        return response()->json('API Token missing/invalid');
+        return response()->json('API Token missing/invalid',400);
+      }
+    }
+
+    public function getArtists(Request $request)
+    {
+      if($this->checkAPIToken($request->api_token) == true){
+        if($getArtist = Artists::where('ArtistID', $request->artistid)->first()){
+          return response()->json($getArtist,200);
+        }else{
+          return response()->json('Failed',400);
+        }
+      }else{
+        return response()->json('API Token missing/invalid',400);
+      }
+    }
+
+    public function addArtists(Request $request)
+    {
+      if($this->checkAPIToken($request->api_token) == true){
+        $artists = new Artists;
+        $artists->ArtistName = $request->artist;
+        $artists->AlbumName = $request->album;
+        $artists->ImageURL = $request->image;
+        $artists->ReleaseDate = $request->release;
+        $artists->Price = $request->price;
+        $artists->SampleURL = $request->sample;
+
+        if($artists->save()){
+          return response()->json('Added successfully',200);
+        }else{
+          return response()->json('Failed',400);
+        }
+      }else{
+        return response()->json('API Token missing/invalid',400);
+      }
+    }
+
+    public function updateArtists(Request $request)
+    {
+      if($this->checkAPIToken($request->api_token) == true){
+
+        if(Artists::where('ArtistID', $request->artistid)->update([
+          'ArtistName' => $request->artist,
+          'AlbumName' => $request->album,
+          'ImageURL' => $request->image,
+          'ReleaseDate' => $request->release,
+          'Price' => $request->price,
+          'SampleURL' => $request->sample
+        ])){
+          return response()->json('Updated successfully',200);
+        }else{
+          return response()->json('Failed',400);
+        }
+      }else{
+        return response()->json('API Token missing/invalid',400);
+      }
+    }
+
+    public function deleteArtists(Request $request)
+    {
+      if($this->checkAPIToken($request->api_token) == true){
+        if(Artists::destroy($request->artistid)){
+          return response()->json('Deleted successfully',200);
+        }else{
+          return response()->json('Failed',400);
+        }
+      }else{
+        return response()->json('API Token missing/invalid',400);
       }
     }
 }
